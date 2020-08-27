@@ -26,7 +26,10 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
-Plug 'wakatime/vim-wakatime'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'ryanoasis/vim-devicons'
+Plug 'airblade/vim-gitgutter'
+Plug 'preservim/nerdtree'
 
 call plug#end()
 
@@ -127,6 +130,22 @@ hi tsxAttrib guifg=#F8BD7F cterm=italic
 " Other settings
 filetype plugin on
 let g:yats_host_keyword = 1
+let NERDTreeShowHidden=1
+set guifont=Fira\ Code:h12
+set number
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " Language settings !!!
 
@@ -141,7 +160,8 @@ let g:typescript_indent_disable = 1
 
 " Nerdtree settings
 :nnoremap <F3> :NERDTreeToggle<CR>
-
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * NERDTree
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd StdinReadPre * let s:std_in=1
@@ -155,10 +175,29 @@ let NERDTreeDirArrows=0
 let NERDTreeQuitOnOpen = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+let g:NERDTreeGitStatusShowIgnored = 1 " a heavy feature may cost much more time. default: 0
+let g:NERDTreeGitStatusUntrackedFilesMode = 'all' " a heave feature too. default: normal
+let g:NERDTreeGitStatusWithFlags = 1
+let g:NERDTreeIgnore = ['^node_modules$','^postgres-data$']
+
+" sync open file with NERDTree
+" " Check if NERDTree is open or active
+function! IsNERDTreeOpen()        
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
 
 " Keymap settings
 noremap <silent> <C-S> :update<CR>
+nnoremap <silent> <C-F> :Files<CR>
 nnoremap <F5> mzgggqG`z
+" Remap for rename current word
+nmap <F2> <Plug>(coc-rename)
+
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
 
 " FORMATTERS
 au FileType javascript setlocal formatprg=prettier
