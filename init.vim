@@ -1,4 +1,4 @@
-" Plugins
+"gin  Plugins
 call plug#begin('~/.vim/plugged')
 
 Plug 'fatih/vim-go'
@@ -30,7 +30,9 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdtree'
-
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'valsorym/vim-tabs'
 call plug#end()
 
 " -------------------------------------------------------------------------------------------------
@@ -109,8 +111,8 @@ autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
 
 " Color theme
 
-colorscheme onehalfdark
-let g:airline_theme='onehalfdark'
+colorscheme onehalflight
+let g:airline_theme='onehalflight'
 
 " dark red
 hi tsxTagName guifg=#E06C75
@@ -146,7 +148,11 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#formatter = 'default'
 " Language settings !!!
 
 " Golang settings
@@ -218,3 +224,4 @@ let g:ale_fix_on_save = 1
 let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio']
     \ }
+
